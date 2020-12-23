@@ -10,23 +10,30 @@ pub mod fasta {
             .map(|l| l.expect("Failed!"))
             .collect()
     }
+
+    fn calculate_gc_ratio(dna: &String) -> f64 {
+        let n = dna.len() as f64;
+        count_gc_content(dna) as f64 / n
+    }
     
-    fn count_gc_content(dna: &String) -> f64 {
-        let mut gc_content: f64 = 0.0;
+    fn count_gc_content(dna: &String) -> u32 {
+        let mut gc_content: u32 = 0;
         for i in dna.chars() {
-            if i == 'G' || i == 'C'  {
-                gc_content += 1.0
-            }
+            match i {
+                'G' | 'g'  => gc_content += 1,
+                'C' | 'c' => gc_content += 1,
+                _ => (), 
+            };
         }
-        gc_content / dna.len() as f64
+        gc_content
     }
 
-    pub fn write_results(seq: &Vec<String>) {
+    pub fn print_results(seq: &Vec<String>) {
         for line in seq {
             if line.starts_with(">") {
                 print!("{}: ", line.replace(">", "").replace("_", " "));
             } else {
-                println!("{:.4}%", count_gc_content(line));
+                println!("{:.4}%", calculate_gc_ratio(line));
             }
         }
     }
@@ -39,8 +46,24 @@ pub mod fasta {
         fn gc_content_test() {
             let a: String = String::from("AA");
             let b: String = String::from("AAGC");
-            assert_eq!(0.0, count_gc_content(&a));
-            assert_eq!(0.5, count_gc_content(&b))
+            let c: String = String::from("aaAA");
+            let d: String = String::from("aattggcc");
+            assert_eq!(0, count_gc_content(&a));
+            assert_eq!(2, count_gc_content(&b));
+            assert_eq!(0, count_gc_content(&c));
+            assert_eq!(4, count_gc_content(&d));
+        }
+
+        #[test]
+        fn gc_ratio_test() {
+            let a: String = String::from("AA");
+            let b: String = String::from("AAGC");
+            let c: String = String::from("aaAA");
+            let d: String = String::from("aattggcc");
+            assert_eq!(0.0, calculate_gc_ratio(&a));
+            assert_eq!(0.5, calculate_gc_ratio(&b));
+            assert_eq!(0.0, calculate_gc_ratio(&c));
+            assert_eq!(0.5, calculate_gc_ratio(&d));
         }
     }
 }
