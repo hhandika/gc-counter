@@ -5,7 +5,7 @@
 mod counter;
 
 use clap::{App, Arg};
-use counter::fasta as fast;
+use counter::fasta;
 
 use std::string::String;
 
@@ -17,11 +17,17 @@ fn main() {
             .help("Fasta file to analyze.")
             .takes_value(true)
             .required(true))
+        .arg(Arg::with_name("output")
+            .help("Output filename")
+            .takes_value(true)
+            .required(true))
         .get_matches();
 
     let input = args.value_of("input").unwrap();
-    let f = String::from(input);
-    let seq = fast::read_file(&f);
-    fast::print_results(&seq);
+    let output = args.value_of("output").unwrap();
+    let infile = String::from(input);
+    let outfile = String::from(output);
+
+    fasta::parse_fasta(&infile, &outfile);
 }
 

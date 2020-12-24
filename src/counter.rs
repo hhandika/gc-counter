@@ -2,14 +2,7 @@ pub mod fasta {
     use std::fs::File;
     use std::io::prelude::*;
     use std::io::BufReader;
-
-    pub fn read_file(fname: &String) -> Vec<String> {
-        let f = File::open(fname).unwrap();
-        let buff = BufReader::new(f);
-        buff.lines()
-            .map(|l| l.expect("Failed!"))
-            .collect()
-    }
+    use std::io::LineWriter;
 
     fn calculate_gc_ratio(dna: &String) -> f64 {
         let n = dna.len() as f64;
@@ -28,14 +21,32 @@ pub mod fasta {
         gc_content
     }
 
-    pub fn print_results(seq: &Vec<String>) {
-        for line in seq {
+    // Parse fasta file
+    // Get gc content and ratio
+    // Write the results to csv
+    // Does not check for valid fasta file.
+    pub fn parse_fasta(input: &String, output: &String) {
+        let f = File::open(input).unwrap();
+        let reader = BufReader::new(f);
+
+        let output_file = format!("{}{}", output, ".csv");
+        let file = File::create(&output_file).unwrap();
+        let mut file = LineWriter::new(file);
+
+        writeln!(file, "Id,GC-Content, GC-Ratio").unwrap();
+        for line_ in reader.lines() {
+            let line = line_.unwrap();
             if line.starts_with(">") {
-                print!("{}: ", line.replace(">", "").replace("_", " "));
+                let id = line.replace(">", "").replace("_", " ");
+                write!(file, "{},", &id).unwrap();
             } else {
-                println!("{:.4}%", calculate_gc_ratio(line));
+                let gc_content = count_gc_content(&line);  
+                let gc_ratio = calculate_gc_ratio(&line);
+                writeln!(file, "{},{:.4}", &gc_content, &gc_ratio).unwrap();
             }
+            
         }
+        println!("Done counting! The result is saved as {}", &output_file);
     }
 
     #[cfg(test)]
