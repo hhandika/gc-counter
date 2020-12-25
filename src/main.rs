@@ -18,7 +18,7 @@ fn main() {
             .takes_value(true)
             .required(true))
         .arg(Arg::with_name("output")
-            .help("Output filename")
+            .help("Output filename (without extension).")
             .takes_value(true)
             .required(true))
         .get_matches();
