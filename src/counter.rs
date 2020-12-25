@@ -37,8 +37,7 @@ pub mod fasta {
 
     // Parse fasta file
     // Get gc content and ratio
-    // Write the results to csv
-    // Does not check for valid fasta file.
+    // Write the results to csv.
     pub fn parse_fasta(input: &String, output: &String) {
         let f = File::open(input).unwrap();
         let reader = BufReader::new(f);
@@ -94,6 +93,14 @@ pub mod fasta {
             assert_eq!(0.5, calculate_gc_ratio(&b));
             assert_eq!(0.0, calculate_gc_ratio(&c));
             assert_eq!(0.5, calculate_gc_ratio(&d));
+        }
+
+        #[test]
+        fn check_fasta_test() {
+            let fasta = String::from("test_files/COIII.fasta");
+            let not_fasta = String::from("test_files/COIII.nex");
+            assert_eq!(true, check_fasta(&fasta));
+            assert_eq!(false, check_fasta(&not_fasta));
         }
     }
 }
