@@ -3,6 +3,7 @@ pub mod fasta {
     use std::io::prelude::*;
     use std::io::BufReader;
     use std::io::LineWriter;
+    use std::process;
 
     fn calculate_gc_ratio(dna: &String) -> f64 {
         let n = dna.len() as f64;
@@ -21,6 +22,19 @@ pub mod fasta {
         gc_content
     }
 
+    fn check_fasta(input: &String) -> bool {
+        let f = File::open(input).unwrap();
+        let reader = BufReader::new(f);
+        let mut result = false;
+        for line_ in reader.lines() {
+            let line = line_.unwrap();
+            if line.starts_with(">") {
+                result = true;
+            } 
+        }
+        result
+    }
+
     // Parse fasta file
     // Get gc content and ratio
     // Write the results to csv
@@ -33,6 +47,11 @@ pub mod fasta {
         let file = File::create(&output_file).unwrap();
         let mut file = LineWriter::new(file);
 
+        let is_fasta = check_fasta(&input);
+        if !is_fasta {
+            println!("Invalid fasta file");
+            process::abort()
+        }
         writeln!(file, "Id,GC-Content, GC-Ratio").unwrap();
         for line_ in reader.lines() {
             let line = line_.unwrap();
