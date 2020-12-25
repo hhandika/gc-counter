@@ -42,15 +42,15 @@ pub mod fasta {
         let f = File::open(input).unwrap();
         let reader = BufReader::new(f);
 
-        let output_file = format!("{}{}", output, ".csv");
-        let file = File::create(&output_file).unwrap();
-        let mut file = LineWriter::new(file);
-
         let is_fasta = check_fasta(&input);
         if !is_fasta {
             println!("\x1b[0;31m==INVALID FASTA FILES==\x1b[0m");
             process::abort()
         }
+
+        let output_file = format!("{}{}", output, ".csv");
+        let file = File::create(&output_file).unwrap();
+        let mut file = LineWriter::new(file);
 
         writeln!(file, "Id,GC-Content, GC-Ratio").unwrap();
         for line_ in reader.lines() {
