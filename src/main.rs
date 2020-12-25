@@ -11,7 +11,7 @@ use std::string::String;
 
 fn main() {
     let args = App::new("GC-Counter")
-        .version("0.0.1")
+        .version("0.1.1")
         .about("Quickly count gc content from a fasta file.")
         .arg(Arg::with_name("input")
             .help("Fasta file to analyze.")
