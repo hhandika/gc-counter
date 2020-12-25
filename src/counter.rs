@@ -51,6 +51,7 @@ pub mod fasta {
             println!("Invalid fasta file");
             process::abort()
         }
+
         writeln!(file, "Id,GC-Content, GC-Ratio").unwrap();
         for line_ in reader.lines() {
             let line = line_.unwrap();
