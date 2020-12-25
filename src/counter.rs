@@ -48,7 +48,7 @@ pub mod fasta {
 
         let is_fasta = check_fasta(&input);
         if !is_fasta {
-            println!("Invalid fasta file");
+            println!("\x1b[0;31m==INVALID FASTA FILES==\x1b[0m");
             process::abort()
         }
 
