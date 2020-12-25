@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.com/hhandika/gc-counter.svg?branch=main)](https://travis-ci.com/hhandika/gc-counter)
 
-Quickly count gc content in a fasta file
-
 GC-Counter is a command line application to quickly count gc content of a fasta file. The result will be saved as a csv. Take a look at the sample folder for input and output files.
 
 ## Usage
