@@ -7,8 +7,6 @@ mod counter;
 use clap::{App, Arg};
 use counter::fasta;
 
-use std::string::String;
-
 fn main() {
     let args = App::new("GC-Counter")
         .version("0.1.1")
